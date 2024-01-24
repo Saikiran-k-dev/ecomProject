@@ -1,0 +1,15 @@
+{
+  "name": "ecomproject",
+  "version": "1.0.0",
+  "description": "\"An ecommerce project using RESTApi\"",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "saikiran k",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
