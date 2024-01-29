@@ -16,6 +16,11 @@ export default class ProductModel{
         products.push(productData)
         return products
     }
+
+    static get(id){
+      const product = products.find(p=>p.id==id)
+      return product
+    }
 }
 var products = [
     new ProductModel(
