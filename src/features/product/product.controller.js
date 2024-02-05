@@ -8,13 +8,13 @@ export default class ProductController {
   
     addProduct(req, res) {
       // Implementation for addProduct
-      // console.log(req.body)
+      console.log(req.body)
       const {name,price,sizes} = req.body
         const newProduct = {
           name,
           price:parseFloat(price),
           sizes:sizes.split(','),
-          imageUrl:req.file.filename
+          // imageUrl:req.file.filename
         }
         const createdProduct = ProductModel.addNewProduct(newProduct)
         res.status(201).send(createdProduct)
@@ -22,6 +22,17 @@ export default class ProductController {
   
     rateProduct(req, res) {
       // Implementation for rateProduct
+      console.log(req.query)
+      const userId = req.query.userId
+      const productId = req.query.productId
+      const rating = req.query.rating
+      
+      const error = ProductModel.rateProduct(userId,productId,rating)
+      if(error){
+        return res.status(400).send(error)
+      } else {
+        res.status(200).send("rating is added")
+      }
     }
   
     getOneProduct(req, res) {
