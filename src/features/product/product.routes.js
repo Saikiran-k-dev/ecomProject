@@ -7,11 +7,17 @@ const productController = new ProductController();
 
 productRouter.get('/filter',productController.filterProducts)
 
-productRouter.get("/", productController.getAllProducts);
-productRouter.post("/",  productController.addProduct);
+productRouter.get("/", (req,res)=>{
+    productController.getAllProducts(req,res)
+});
+productRouter.post("/",  (req,res)=>{
+    productController.addProduct(req,res)
+});
 productRouter.post("/rate", productController.rateProduct)
 // productRouter.post("/", upload.single("imageUrl"), productController.addProduct);
-productRouter.get("/:id", productController.getOneProduct); 
+productRouter.get("/:id", (req,res)=>{
+    productController.getOneProduct(req,res)
+}); 
 
 
 

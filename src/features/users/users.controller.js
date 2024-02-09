@@ -1,22 +1,38 @@
+import bcrypt from "bcrypt"
+
 import UserModel from "./users.model.js";
 import jwt from "jsonwebtoken"
+import UserRepository from "./users.repositories.js";
 export default class UserController{
-    signUp(req,res){
+    constructor(){
+        this.userRepository = new UserRepository()
+    }
+
+    async signUp(req,res){
         console.log(req.body)
         const {name,email,password,type}=req.body
-        const newUser = UserModel.signUp(name,email,password,type)
+        const hashedPass = await bcrypt.hash(password,12)
+        const newUser =  new UserModel(name,email,hashedPass,type)
+        await this.userRepository.signUp(newUser)
         res.status(201).send(newUser)
     }
-    signIn(req,res){
+    async signIn(req,res){
         const {email,password} = req.body
-        const userFound = UserModel.signIn(email,password)
+        const userFound = await this.userRepository.findEmail(email)
         if(!userFound){
             return res.status(400).send("user not found")
         } else {
-            const token = jwt.sign({userId:userFound.id,email:userFound.email},"kxPcfUdXVZ6vrSkanQk3xEEZbd6iXLmp",{
-                expiresIn:"1h"
-            })
-            res.status(200).send(token)
-        }
+            const result = await bcrypt.compare(password,userFound.password)
+            if(result){
+                const token = jwt.sign({userId:userFound.id,email:userFound.email},process.env.JWT_SECRET,{
+                    expiresIn:"1h"
+                })
+                 res.status(200).send(token)
+            } else {
+                return res.status(400).send("user not found")
+            }
+        } 
+        
+        
     }
 }

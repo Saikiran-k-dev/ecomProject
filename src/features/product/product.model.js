@@ -1,8 +1,8 @@
+
 import UserModel from "../users/users.model.js"
 
 export default class ProductModel{
-    constructor(id,name,desc,price,imageUrl,category,sizes){
-        this.id = id
+    constructor(name,desc,price,imageUrl,category,sizes){
         this.name = name
         this.desc = desc
         this.price = price
@@ -36,12 +36,12 @@ export default class ProductModel{
         const isValidUser = UserModel.getAll().find(u=>u.id==userId)
 
         if(!isValidUser){
-          return ("user Not found")
+          throw new Error("user not found")
         }
         const isValidProduct = products.find(p=>p.id==productId)
-        console.log(isValidProduct)
+        // console.log(isValidProduct)
         if(!isValidProduct){
-          return("product not found")
+          throw new Error("product not found")
         }
         if(!isValidProduct.rating){
           isValidProduct.rating = []
@@ -57,7 +57,7 @@ export default class ProductModel{
             isValidProduct.rating.push({userId:userId,rating:rating})
           }
         }
-        console.log(isValidProduct.rating)
+        // console.log(isValidProduct.rating)
     }
 }
 var products = [
