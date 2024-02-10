@@ -19,12 +19,13 @@ export default class UserController{
     async signIn(req,res){
         const {email,password} = req.body
         const userFound = await this.userRepository.findEmail(email)
+        console.log(userFound)
         if(!userFound){
             return res.status(400).send("user not found")
         } else {
             const result = await bcrypt.compare(password,userFound.password)
             if(result){
-                const token = jwt.sign({userId:userFound.id,email:userFound.email},process.env.JWT_SECRET,{
+                const token = jwt.sign({userId:userFound._id,email:userFound.email},process.env.JWT_SECRET,{
                     expiresIn:"1h"
                 })
                  res.status(200).send(token)

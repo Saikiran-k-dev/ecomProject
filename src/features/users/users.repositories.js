@@ -16,6 +16,7 @@ export default class UserRepository{
         try {
             const db = getDb()
             const collection = db.collection("users")
+            console.log({email,password})
             return await collection.findOne({email,password})
     
         } catch (error) {
@@ -28,6 +29,7 @@ export default class UserRepository{
         try {
             const db = getDb()
             const collection = db.collection("users")
+            console.log({email})
             return await collection.findOne({email})
     
         } catch (error) {

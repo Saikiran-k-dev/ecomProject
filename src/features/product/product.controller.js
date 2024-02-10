@@ -21,20 +21,20 @@ export default class ProductController {
         //   sizes:sizes.split(','),
         //   // imageUrl:req.file.filename
         // }
-        const createdProduct = new ProductModel(name,price,sizes)
+        const createdProduct = new ProductModel(name,null,price,null,null,sizes)
         await this.productRepository.add(createdProduct)
         res.status(201).send(createdProduct)
     }
   
-    rateProduct(req, res) {
+    async rateProduct(req, res) {
       // Implementation for rateProduct
       // console.log(req.query)
-      const userId = req.query.userId
+      const userId = req.userId
       const productId = req.query.productId
       const rating = req.query.rating
       
       try{
-        ProductModel.rateProduct(userId,productId,rating)
+        await this.productRepository.rateProduct(userId,productId,rating)
         res.status(200).send("rating is added")
       } catch (err) {
         return res.status(400).send(err.message)
@@ -55,14 +55,18 @@ export default class ProductController {
       }
     }
   
-    filterProducts(req, res) {
+    async filterProducts(req, res) {
       // Implementation for filterProducts
-      const minPrice = req.query.minPrice;
+      try {
+        const minPrice = req.query.minPrice;
       const maxPrice = req.query.maxPrice;
       const category = req.query.category;
       // console.log(minPrice,maxPrice,category)
-      const result = ProductModel.filter(minPrice,maxPrice,category)
+      const result = await this.productRepository(minPrice,maxPrice,category)
       res.status(200).send(result)
     }
+  catch(err){
+    console.log(err)
+  }}
   }
   
