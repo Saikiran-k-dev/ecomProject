@@ -30,8 +30,8 @@ export default class ProductController {
       // Implementation for rateProduct
       // console.log(req.query)
       const userId = req.userId
-      const productId = req.query.productId
-      const rating = req.query.rating
+      const productId = req.body.productId
+      const rating = req.body.rating
       
       try{
         await this.productRepository.rateProduct(userId,productId,rating)
@@ -68,5 +68,9 @@ export default class ProductController {
   catch(err){
     console.log(err)
   }}
+    async average(req,res,next){
+      const result = await this.productRepository.averagePriceOfProduct()
+      res.status(200).send(result)
+    }
   }
   

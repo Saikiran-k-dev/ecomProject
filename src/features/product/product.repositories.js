@@ -1,4 +1,4 @@
-import { Collection, ObjectId } from "mongodb";
+import {  ObjectId } from "mongodb";
 import { getDb } from "../../config/mongodb.js";
 import e from "express";
 
@@ -53,15 +53,31 @@ export default class ProductRepository{
         try {
             const db  = getDb()
             const collection = db.collection(this.collection)
-            collection.updateOne({
+            console.log(productId,userId,rating)
+            await collection.updateOne({ _id:new ObjectId(productId)},{
+                $pull:{ratings:{userId:new ObjectId(userId)}}
+            })
+            await collection.updateOne({
                 _id:new ObjectId(productId)
             },{
                 $push:{ratings:{userId:new ObjectId(userId),rating}}
             }
             )
-        } catch (error) {
+        }
+         catch (error) {
             throw new Error(error)
             
         }
+    }
+    async averagePriceOfProduct(){
+        const db = getDb()
+        return await db.collection(this.collection).aggregate([
+            {
+                $group:{
+                    _id:"$category",
+                    averagePrice:{$avg:"$price"}
+                }
+            }
+        ]).toArray
     }
 }

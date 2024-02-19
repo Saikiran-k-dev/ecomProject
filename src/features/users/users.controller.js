@@ -2,7 +2,7 @@ import bcrypt from "bcrypt"
 
 import UserModel from "./users.model.js";
 import jwt from "jsonwebtoken"
-import UserRepository from "./users.repositories.js";
+import UserRepository from "./user.repositories.js";
 export default class UserController{
     constructor(){
         this.userRepository = new UserRepository()

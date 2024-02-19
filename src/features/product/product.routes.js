@@ -18,6 +18,9 @@ productRouter.post("/",  (req,res)=>{
 productRouter.post("/rate", (req,res)=>{
     productController.rateProduct(req,res)
 })
+productRouter.get("/averagePrice",(req,res,next)=>{
+    productController.average(req,res)
+})
 // productRouter.post("/", upload.single("imageUrl"), productController.addProduct);
 productRouter.get("/:id", (req,res)=>{
     productController.getOneProduct(req,res)

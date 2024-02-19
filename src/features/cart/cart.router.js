@@ -5,7 +5,12 @@ const cartRouter = express.Router()
 
 const cartController = new CartController
 
-cartRouter.post("/",cartController.addToCart)
-cartRouter.get("/",cartController.getCart)
-cartRouter.delete("/:id",cartController.deleteCart)
+cartRouter.post("/",(req,res)=>{
+cartController.addToCart(req,res)})
+cartRouter.get("/",(req,res)=>{
+    cartController.getCart(req,res)
+})
+cartRouter.delete("/:id",(req,res)=>{
+    cartController.deleteCart(req,res)
+})
 export default cartRouter

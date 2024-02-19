@@ -14,6 +14,8 @@ import apiDocs from "./swagger.json" assert {type:'json'}
 import { loggerMiddleware } from "./src/middleware/log.middleware.js";
 import logger from "./src/middleware/log.middleware.js";
 import { connectToMongoDb } from "./src/config/mongodb.js";
+import orderRouter from "./src/features/order/order.routes.js";
+import { connectUsingMongoose } from "./src/config/mongooseConfig.js";
 
 
 // import {loggerMiddleware,logger} from "./src/middleware/log.middleware.js";
@@ -42,7 +44,7 @@ app.use("/api_docs",swagger.serve,swagger.setup(apiDocs))
 app.use("/api/products",jwtAuth, productRouter);
 app.use("/api/users",userRouter)
 app.use("/api/cart",jwtAuth,cartRouter)
-
+app.use("api/order",jwtAuth,orderRouter)
 
 app.use((err,req,res,next)=>{
   logger.error(err.message)
@@ -58,5 +60,6 @@ app.use((req,res)=>{
 // Server listening
 app.listen(3000, () => {
   console.log("Server is listening at port 3000");
-  connectToMongoDb()
+  // connectToMongoDb()
+  connectUsingMongoose()
 });

@@ -1,9 +1,8 @@
 export default class CartModel{
-    constructor(userId,productId,quantity,id){
+    constructor(userId,productId,quantity){
         this.userId = userId
         this.productId = productId
         this.quantity = quantity
-        this.id = id
     }
     static addToCart(userId,productId,quantity){
         const alreadyPresent = cartItems.findIndex(u=>userId==userId && u.productId==productId)

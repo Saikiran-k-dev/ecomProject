@@ -3,7 +3,6 @@ import dotenv from "dotenv"
 
 dotenv.config()
 
-
 let client
 
 export const connectToMongoDb = () =>{
@@ -14,6 +13,10 @@ export const connectToMongoDb = () =>{
     }).catch(err=>{
         console.log(err)
     })
+}
+
+export const getClient =()=>{
+    return client
 }
 
 export const getDb = () =>{
