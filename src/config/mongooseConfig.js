@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv"
+import { categorySchema } from "../features/product/category.schema.js";
 
 dotenv.config()
 
@@ -11,7 +12,19 @@ export const connectUsingMongoose = async () =>{
             useUnifiedTopology:true
         })
         console.log("MongoDb is connected using Mongoose")
+        addCategories()
     } catch (error) {
         console.log(error)
+    }
+}
+
+async function addCategories(){
+    const CategoryModel = mongoose.model("category",categorySchema)
+    const categories = await CategoryModel.find()
+    // console.log(categories)
+    if(!categories || categories.length==0){
+       
+        await CategoryModel.insertMany([{
+            name:"books"},{name:"clothing"},{name:"food"}])
     }
 }

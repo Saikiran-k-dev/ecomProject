@@ -16,6 +16,7 @@ import logger from "./src/middleware/log.middleware.js";
 import { connectToMongoDb } from "./src/config/mongodb.js";
 import orderRouter from "./src/features/order/order.routes.js";
 import { connectUsingMongoose } from "./src/config/mongooseConfig.js";
+import likeRouter from "./src/features/likes/like.router.js";
 
 
 // import {loggerMiddleware,logger} from "./src/middleware/log.middleware.js";
@@ -45,6 +46,7 @@ app.use("/api/products",jwtAuth, productRouter);
 app.use("/api/users",userRouter)
 app.use("/api/cart",jwtAuth,cartRouter)
 app.use("api/order",jwtAuth,orderRouter)
+app.use("/api/likes",jwtAuth,likeRouter)
 
 app.use((err,req,res,next)=>{
   logger.error(err.message)

@@ -1,5 +1,11 @@
+import mongoose, { mongo } from "mongoose";
 import ProductModel from "./product.model.js";
 import ProductRepository from "./product.repositories.js";
+import { productSchema } from "./product.schema.js";
+import { reviewSchema } from "./reviews.schema.js";
+
+// const ProductModel = new mongoose.model("product",productSchema)
+// const ReviewModel = new mongoose.model("review",reviewSchema)
 
 export default class ProductController {
 

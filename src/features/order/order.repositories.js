@@ -14,19 +14,19 @@ export default class OrderRepositories{
             
             const db = getDb()
             session.startTransaction()
-           const items = await this.getTotalAmount(userId,session)
-           const finalAmount = items.reduce((acc,item)=>acc+item.totalAmount,0)
-           const newOrder = new OrderModel(new ObjectId(userId),finalAmount,new Date())
-           await db.collection(this.collection).insertOne(newOrder,{session})
-           for(let item in items){
-            await db.collection("product").updateOne({_id:item.productId},{$inc:{stock:-item.quantity}},{session})
-           }
-           await db.collection("cart").deleteMany({userId:userId},{session})
-           session.commitTransaction()
-           session.endSession()
-        } catch (error) {
-            await session.abortTransaction()
+            const items = await this.getTotalAmount(userId,session)
+            const finalAmount = items.reduce((acc,item)=>acc+item.totalAmount,0)
+            const newOrder = new OrderModel(new ObjectId(userId),finalAmount,new Date())
+            await db.collection(this.collection).insertOne(newOrder,{session})
+            for(let item in items){
+                await db.collection("product").updateOne({_id:item.productId},{$inc:{stock:-item.quantity}},{session})
+            }
+            await db.collection("cart").deleteMany({userId:userId},{session})
+            session.commitTransaction()
             session.endSession()
+        }   catch (error) {
+                await session.abortTransaction()
+                session.endSession()
         }
     }
     async getTotalAmount(userId,session){

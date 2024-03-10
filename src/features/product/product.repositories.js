@@ -1,6 +1,11 @@
 import {  ObjectId } from "mongodb";
 import { getDb } from "../../config/mongodb.js";
-import e from "express";
+import mongoose from "mongoose";
+import { productSchema } from "./product.schema.js";
+import { reviewSchema } from "./reviews.schema.js";
+
+const ProductModel = new mongoose.model("product",productSchema)
+const ReviewModel = new mongoose.model("review",reviewSchema)
 
 export default class ProductRepository{
      
@@ -51,18 +56,25 @@ export default class ProductRepository{
 
     async rateProduct(userId,productId,rating){
         try {
-            const db  = getDb()
-            const collection = db.collection(this.collection)
-            console.log(productId,userId,rating)
-            await collection.updateOne({ _id:new ObjectId(productId)},{
-                $pull:{ratings:{userId:new ObjectId(userId)}}
-            })
-            await collection.updateOne({
-                _id:new ObjectId(productId)
-            },{
-                $push:{ratings:{userId:new ObjectId(userId),rating}}
+            const isValidProduct = await ProductModel.findById(productId)
+            if (!isValidProduct){
+                throw new Error("product Not Found")
             }
-            )
+            const userReview = await ReviewModel.findOne({product: new ObjectId(productId),user: new ObjectId(userId)})
+            if (userReview){
+                userReview.rating=rating
+                userReview.save()
+            } else {
+                const newReview = new ReviewModel(
+                    {
+                        product: new ObjectId(productId),
+                        user: new ObjectId(userId),
+                        rating
+                    }
+                    
+                )
+                newReview.save()
+            }
         }
          catch (error) {
             throw new Error(error)
